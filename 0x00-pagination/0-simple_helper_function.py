@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
-""" Pagination """
-
-from typing import Tuple
+"""0-simple_helper_function"""
 
 
-def index_range(page: int, page_size: int) -> Tuple[int, int]:
-    """ returns tuple of size two containing a start index and an end index """
-    pass
+def index_range(page, page_size):
+    """should return a tuple of size"""
+    return ((page - 1) * page_size, (page - 1) * page_size + page_size)
