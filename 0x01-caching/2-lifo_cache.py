@@ -1,31 +1,34 @@
 #!/usr/bin/env python3
-""" Python caching systems """
+"""LIFO Caching"""
 
 from base_caching import BaseCaching
 
 
-class LIFOCache(BaseCaching):
-    """ LIFO caching system """
+class LIFOCache (BaseCaching):
+    """LIFO Caching"""
 
     def __init__(self):
-        ''' Initialize class instance. '''
         super().__init__()
-        self.current_keys = []
 
     def put(self, key, item):
-        """ Add an item in the cache """
-        if key is not None or item is not None:
+        """ Add an item in the cache
+        """
+        i = 0
+        if key and item:
             self.cache_data[key] = item
-            if key not in self.current_keys:
-                self.current_keys.append(key)
-            else:
-                self.current_keys.append(self.current_keys.pop(
-                    self.current_keys.index(key)))
-            if len(self.current_keys) > BaseCaching.MAX_ITEMS:
-                discarded_key = self.current_keys.pop(-2)
-                del self.cache_data[discarded_key]
-                print('DISCARD: {}'.format(discarded_key))
+            if (len(self.cache_data) > BaseCaching.MAX_ITEMS):
+                for key, _ in self.cache_data.items():
+                    i += 1
+                    if i == len(self.cache_data)-1:
+                        print(f"DISCARD: {key}")
+                        break
+                del self.cache_data[key]
+        else:
+            pass
 
     def get(self, key):
-        """ Get an item by key """
-        return self.cache_data.get(key)
+        """ Get an item by key
+        """
+        if key in self.cache_data:
+            return self.cache_data[key]
+        return None

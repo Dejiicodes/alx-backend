@@ -1,35 +1,29 @@
-#!/usr/bin/env python3
-""" Python caching systems """
-
+#!/usr/bin/python3
+"""LRU Caching"""
+from collections import OrderedDict
 from base_caching import BaseCaching
 
 
 class LRUCache(BaseCaching):
-    """ LRU caching system """
+    """class LRUCache that inherits
+    from BaseCaching and is a caching system"""
 
     def __init__(self):
-        ''' Initialize class instance. '''
         super().__init__()
-        self.current_keys = []
+        self.cache_data = OrderedDict()
 
     def put(self, key, item):
-        """ Add an item in the cache """
-        if key is not None or item is not None:
+        """Must assign to the dictionary """
+        if key is not None and item is not None:
+            if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
+                discarded_key, _ = self.cache_data.popitem(last=False)
+                print(f"DISCARD: {discarded_key}")
             self.cache_data[key] = item
-            if key not in self.current_keys:
-                self.current_keys.append(key)
-            else:
-                self.current_keys.append(self.current_keys.pop(
-                    self.current_keys.index(key)))
-            if len(self.current_keys) > BaseCaching.MAX_ITEMS:
-                discarded_key = self.current_keys.pop(0)
-                del self.cache_data[discarded_key]
-                print('DISCARD: {}'.format(discarded_key))
 
     def get(self, key):
-        """ Get an item by key """
-        if key is not None and key in self.cache_data:
-            self.current_keys.append(self.current_keys.pop(
-                self.current_keys.index(key)))
-            return self.cache_data.get(key)
+        """Must return the value in self.cache_data"""
+        if key is not None:
+            if key in self.cache_data:
+                self.cache_data.move_to_end(key)
+                return self.cache_data[key]
         return None
